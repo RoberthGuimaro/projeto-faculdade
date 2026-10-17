@@ -3,28 +3,28 @@
 #include <string.h>
 #include <limits.h>
 
-
-
 #define NUM_CIDADES 5
 #define MAX_VEICULOS 10
 #define MAX_VIAGENS 100
 #define PRECO_COMBUSTIVEL 5.80f
-#define DISPONIVEL 0 
+#define DISPONIVEL 0
 #define EM_VIAGEM 1
 #define EM_MANUTENCAO 2
 
-struct Veiculo {
+struct Veiculo
+{
     int id; // identificador único
     char placa[8];
     char modelo[30];
-    float consumoKmL; // Consumo por litro
+    float consumoKmL;      // Consumo por litro
     float capacidadeCarga; // Capacidade de carga em toneladas
-    int status; // 0 - disponivel, 1 - em viagem, 2 - em manutenção
+    int status;            // 0 - disponivel, 1 - em viagem, 2 - em manutenção
 };
 
-struct Viagem {
-    int idVeiculo; // identificador único
-    int cidadeOrigem; // indice da cidade de 0 a N - 1  
+struct Viagem
+{
+    int idVeiculo;     // identificador único
+    int cidadeOrigem;  // indice da cidade de 0 a N - 1
     int cidadeDestino; // indice da cidade de 0 a N - 1
     float distanciaTotal;
     float consumoEstimadoLitros;
@@ -37,8 +37,7 @@ const char *NOME_CIDADES[NUM_CIDADES] = {
     "1: Norte",
     "2: Sul",
     "3: Leste",
-    "4: Oeste"
-};
+    "4: Oeste"};
 
 // matris de distancia em km
 // 0 - mesma cidade
@@ -46,56 +45,139 @@ const char *NOME_CIDADES[NUM_CIDADES] = {
 
 int distancias[NUM_CIDADES][NUM_CIDADES] = {
     /*             0:Central  1:Norte  2:Sul  3:Leste  4:Oeste */
-    /* 0:central */ {   0,       45,    60,    30,    80 },
-    /* 1:norte   */ {  45,        0,    -1,    25,   110 },
-    /* 2:sul     */ {  60,       -1,     0,    70,    40 },
-    /* 3:leste   */ {  30,       25,    70,     0,    -1 },
-    /* 4:oeste   */ {  80,      110,    40,    -1,     0 }
-};
+    /* 0:central */ {0, 45, 60, 30, 80},
+    /* 1:norte   */ {45, 0, -1, 25, 110},
+    /* 2:sul     */ {60, -1, 0, 70, 40},
+    /* 3:leste   */ {30, 25, 70, 0, -1},
+    /* 4:oeste   */ {80, 110, 40, -1, 0}};
 
-static void lerLinha(const char *prompt, char *buffer, size_t tamanho) {
+static void lerLinha(const char *prompt, char *buffer, size_t tamanho)
+{
     printf("%s", prompt);
-    if (fgets(buffer, tamanho, stdin) == NULL) {
+    if (fgets(buffer, tamanho, stdin) == NULL)
+    {
         printf("\nEntrada encererrada.\n");
         exit(0);
     }
     size_t len = strlen(buffer);
-    if (len > 0 && buffer[len - 1] == '\n') {
+    if (len > 0 && buffer[len - 1] == '\n')
+    {
         buffer[len - 1] = '\0'; // Remove o caractere de nova linha
-    } else {
+    }
+    else
+    {
         int c;
-        while ((c = getchar()) != '\n' && c != EOF) {
+        while ((c = getchar()) != '\n' && c != EOF)
+        {
         }
     }
 }
 
-static int lerInteiro(const char *prompt) {
+static int lerInteiro(const char *prompt)
+{
     char buffer[64], *endptr;
-    for (;;) {
+    for (;;)
+    {
         lerLinha(prompt, buffer, sizeof(buffer));
         long valor = strtol(buffer, &endptr, 10);
-        if (endptr != buffer && *endptr == '\0' && valor >= INT_MIN && valor <= INT_MAX) {
+        if (endptr != buffer && *endptr == '\0' && valor >= INT_MIN && valor <= INT_MAX)
+        {
             return (int)valor;
         }
         printf("Entrada inválida. Por favor, insira um número inteiro.\n");
     }
 }
 
-static float lerFloat(const char *prompt) {
+static float lerFloat(const char *prompt)
+{
     char buffer[64], *endptr;
-    for (;;) {
+    for (;;)
+    {
         lerLinha(prompt, buffer, sizeof(buffer));
         float valor = strtof(buffer, &endptr);
-        if (endptr != buffer && *endptr == '\0') {
+        if (endptr != buffer && *endptr == '\0')
+        {
             return valor;
         }
         printf("Entrada inválida. Por favor, insira um número válido.\n");
     }
 }
 
-int main(void) {
+int cadastrarVeiculo(struct Veiculo veiculois[], int quantidade)
+{
+    int id;
+    int repetido;
+    int i;
+
+    if (quantidade >= MAX_VEICULOS)
+    {
+        printf("Limite de veículos atingido.\n");
+        return quantidade;
+    }
+    do
+    {
+        id = lerInteiro("Digite o ID do veículo (número inteiro): ");
+        repetido = 0;
+
+        for (i = 0; i < quantidade; i++)
+        {
+            if (veiculois[i].id == id)
+            {
+                repetido = 1;
+            }
+        }
+
+        if (repetido)
+        {
+            printf("ID já cadastrado.\n");
+        }
+    } while (repetido == 1);
+
+    veiculos[quantidade].id = id;
+
+    lerLinha("Digite a placa: ",
+             veiculos[quantidade].placa,
+             sizeof(veiculos[quantidade].placa));
+
+    lerLinha("Digite o modelo: ",
+             veiculos[quantidade].modelo,
+             sizeof(veiculos[quantidade].modelo));
+
+    do
+    {
+        veiculos[quantidade].consumoKmL =
+            lerFloat("Digite o consumo em km/l: ");
+
+        if (veiculos[quantidade].consumoKmL <= 0)
+        {
+            printf("O Consumo deve ser maior que zero.\n");
+        }
+    } while (veiculos[quantidade].consumoKmL <= 0);
+
+    do
+    {
+        veiculos[quantidade].capacidadeCarga =
+            lerFloat("Digite a capacidade eem toneladas: ");
+
+        if (veiculos[quantidade].capacidadeCarga <= 0)
+        {
+            printf("A capacidade de carga deve ser maior que zero.\n");
+        }
+    } while (veiculos[quantidade].capacidadeCarga <= 0);
+
+    veiculos[quantidade].status = DISPONIVEL;
+    printf("Veículo cadastrado com sucesso!\n");
+    return quantidade + 1;
+}
+
+int main(void)
+{
+    struct Veiculo veiculos[MAX_VEICULOS];
+    int quantidadeVeiculos = 0;
+
     int opcao;
-    do {
+    do
+    {
         printf("\n======================================\n");
         printf("Sistema de Gerenciamento de Frota\n");
         printf("======================================\n");
@@ -109,27 +191,39 @@ int main(void) {
 
         opcao = lerInteiro("Escolha uma opção: ");
 
-        if (opcao == 1) {
-                printf("Opção 1: Cadastrar Veículo\n");
-                // Implementar cadastro de veículo
-        } else if (opcao == 2) {
-                printf("Opção 2: Listar Veículos\n");
-                // Implementar listagem de veículos
-        } else if (opcao == 3) {
-                printf("Opção 3: Consultar matriz de distancia\n");
-                // Implementar consulta da matriz de distância
-        } else if (opcao == 4) {
-                printf("Opção 4: Planejar / Simular viagem\n");
-                // Implementar planejamento/simulação de viagem
-        } else if (opcao == 5) {
-                printf("Opção 5: Relatório de desempenho de frota\n");
-                // Implementar relatório de desempenho
-        } else if (opcao == 0) {
-                printf("Saindo do sistema...\n");
-        } else {
-                printf("Opção inválida. Tente novamente.\n");
-        } 
+        if (opcao == 1)
+        {
+            quantidadeVeiculos = cadastrarVeiculo(veiculos, quantidadeVeiculos);
+        }
+        else if (opcao == 2)
+        {
+            printf("Opção 2: Listar Veículos\n");
+            // Implementar listagem de veículos
+        }
+        else if (opcao == 3)
+        {
+            printf("Opção 3: Consultar matriz de distancia\n");
+            // Implementar consulta da matriz de distância
+        }
+        else if (opcao == 4)
+        {
+            printf("Opção 4: Planejar / Simular viagem\n");
+            // Implementar planejamento/simulação de viagem
+        }
+        else if (opcao == 5)
+        {
+            printf("Opção 5: Relatório de desempenho de frota\n");
+            // Implementar relatório de desempenho
+        }
+        else if (opcao == 0)
+        {
+            printf("Saindo do sistema...\n");
+        }
+        else
+        {
+            printf("Opção inválida. Tente novamente.\n");
+        }
     } while (opcao != 0);
-    
+
     return 0;
 }
