@@ -251,11 +251,96 @@ void consultarMatrix(void)
         {
             distancias[origem][destino] = distancia;
             distancias[destino][origem] = distancia; // Atualiza a matriz simetricamente
-            
+
             printf("Distancia atualizada com sucesso!\n");
         }
     }
+}
 
+void simularViagem(struct Veiculo veiculos[], int quantidade)
+{
+    int id;
+    int posicao = -1;
+    int i;
+    int confirmar;
+    struct Viagem viagem;
+
+    if (quantidade == 0)
+    {
+        printf("Nenhum veículo cadastrado.\n");
+        return;
+    }
+
+    id = lerInteiro("Digite o ID do veículo: ");
+
+    for (i = 0; i < quantidade; i++)
+    {
+        if (veiculos[i].id == id)
+        {
+            posicao = i;
+        }
+    }
+
+    if (posicao == -1)
+    {
+        printf("Veículo não encontrado.\n");
+        return;
+    }
+
+    if (veiculos[posicao].status != DISPONIVEL)
+    {
+        printf("Veículo não está disponível.\n");
+        return;
+    }
+
+    printf("\nCidades:\n");
+
+    for (i = 0; i < NUM_CIDADES; i++)
+    {
+        printf("%s\n", NOME_CIDADES[i]);
+    }
+
+    viagem.idVeiculo = id;
+    viagem.cidadeOrigem = lerInteiro("Digite a cidade de origem: ");
+    viagem.cidadeDestino = lerInteiro("Digite a cidade de destino: ");
+
+    if (viagem.cidadeOrigem < 0 || viagem.cidadeOrigem >= NUM_CIDADES ||
+        viagem.cidadeDestino < 0 || viagem.cidadeDestino >= NUM_CIDADES)
+    {
+        printf("Cidades inválidas.\n");
+        return;
+    }
+
+    viagem.distanciaTotal =
+        distancias[viagem.cidadeOrigem][viagem.cidadeDestino];
+
+    if (viagem.distanciaTotal <= 0)
+    {
+        printf("Não há rota direta entre as cidades selecionadas.\n");
+        return;
+    }
+
+    viagem.consumoEstimadoLitros =
+        viagem.distanciaTotal / veiculos[posicao].consumoKmL;
+
+    viagem.custoEstimadoReais =
+        viagem.consumoEstimadoLitros * PRECO_COMBUSTIVEL;
+
+    printf("\nDistancia: %.2f km\n", viagem.distanciaTotal);
+    printf("Consumo estimado: %.2f litros\n", viagem.consumoEstimadoLitros);
+    printf("Custo estimado: R$ %.2f\n", viagem.custoEstimadoReais);
+
+    confirmar = lerInteiro("Deseja confirmar a viagem? (1-Sim / 0-Não): ");
+
+    if (confirmar == 1)
+    {
+        veiculos[posicao].status = EM_VIAGEM;
+        printf("Viagem confirmada.\n");
+    }
+    else
+    {
+        printf("Viagem cancelada.\n");
+    }
 }
 
 int main(void)
@@ -293,8 +378,7 @@ int main(void)
         }
         else if (opcao == 4)
         {
-            printf("Opção 4: Planejar / Simular viagem\n");
-            // Implementar planejamento/simulação de viagem
+            simularViagem(veiculos, quantidadeVeiculos);
         }
         else if (opcao == 5)
         {
