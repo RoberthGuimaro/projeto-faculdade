@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <limits.h>
 
 
 
@@ -53,11 +56,28 @@ int distancias[NUM_CIDADES][NUM_CIDADES] = {
 static void lerLinha(const char *prompt, char *buffer, size_t tamanho) {
     printf("%s", prompt);
     if (fgets(buffer, tamanho, stdin) != NULL) {
-        // Remove o caractere de nova linha, se presente
-        size_t len = strlen(buffer);
-        if (len > 0 && buffer[len - 1] == '\n') {
-            buffer[len - 1] = '\0';
+        printf("\nEntrada encererrada.\n");
+        exit(0);
+    }
+    size_t len = strlen(buffer);
+    if (len > 0 && buffer[len - 1] == '\n') {
+        buffer[len - 1] = '\0'; // Remove o caractere de nova linha
+    } else {
+        int c;
+        while ((c = getchar()) != '\n' && c != EOF) {
         }
     }
 }
 
+static int lerInteiro(const char *prompt) {
+    char buffer[64], *fim;
+    for (;;) {
+        lerLinha(prompt, buffer, sizeof(buffer));
+        char *endptr;
+        int valor = strtol(buffer, &endptr, 10);
+        if (endptr != buffer && *endptr == '\0') {
+            return valor;
+        }
+        printf("Entrada inválida. Por favor, insira um número inteiro.\n");
+    }
+}
