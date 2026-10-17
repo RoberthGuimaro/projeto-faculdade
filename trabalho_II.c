@@ -55,7 +55,7 @@ int distancias[NUM_CIDADES][NUM_CIDADES] = {
 
 static void lerLinha(const char *prompt, char *buffer, size_t tamanho) {
     printf("%s", prompt);
-    if (fgets(buffer, tamanho, stdin) != NULL) {
+    if (fgets(buffer, tamanho, stdin) == NULL) {
         printf("\nEntrada encererrada.\n");
         exit(0);
     }
@@ -73,10 +73,26 @@ static int lerInteiro(const char *prompt) {
     char buffer[64], *endptr;
     for (;;) {
         lerLinha(prompt, buffer, sizeof(buffer));
-        int valor = strtol(buffer, &endptr, 10);
+        long valor = strtol(buffer, &endptr, 10);
         if (endptr != buffer && *endptr == '\0' && valor >= INT_MIN && valor <= INT_MAX) {
             return (int)valor;
         }
         printf("Entrada inválida. Por favor, insira um número inteiro.\n");
     }
+}
+
+static float lerFloat(const char *prompt) {
+    char buffer[64], *endptr;
+    for (;;) {
+        lerLinha(prompt, buffer, sizeof(buffer));
+        float valor = strtof(buffer, &endptr);
+        if (endptr != buffer && *endptr == '\0') {
+            return valor;
+        }
+        printf("Entrada inválida. Por favor, insira um número válido.\n");
+    }
+}
+
+int main(void) {
+    return 0;
 }
