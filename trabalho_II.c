@@ -94,5 +94,42 @@ static float lerFloat(const char *prompt) {
 }
 
 int main(void) {
+    int opcao;
+    do {
+        printf("\n======================================\n");
+        printf("Sistema de Gerenciamento de Frota\n");
+        printf("======================================\n");
+        printf("1. Cadastrar Veículo\n");
+        printf("2. Listar Veículos\n");
+        printf("3. Consultar matriz de distancia\n");
+        printf("4. Planejar / Simular viagem\n");
+        printf("5. Relatório de desempenho de frota\n");
+        printf("0. Sair\n");
+        printf("======================================\n");
+
+        opcao = lerInteiro("Escolha uma opção: ");
+
+        if (opcao == 1) {
+                printf("Opção 1: Cadastrar Veículo\n");
+                // Implementar cadastro de veículo
+        } else if (opcao == 2) {
+                printf("Opção 2: Listar Veículos\n");
+                // Implementar listagem de veículos
+        } else if (opcao == 3) {
+                printf("Opção 3: Consultar matriz de distancia\n");
+                // Implementar consulta da matriz de distância
+        } else if (opcao == 4) {
+                printf("Opção 4: Planejar / Simular viagem\n");
+                // Implementar planejamento/simulação de viagem
+        } else if (opcao == 5) {
+                printf("Opção 5: Relatório de desempenho de frota\n");
+                // Implementar relatório de desempenho
+        } else if (opcao == 0) {
+                printf("Saindo do sistema...\n");
+        } else {
+                printf("Opção inválida. Tente novamente.\n");
+        } 
+    } while (opcao != 0);
+    
     return 0;
 }
