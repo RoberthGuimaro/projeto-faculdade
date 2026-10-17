@@ -203,6 +203,61 @@ void listarVeiculos(struct Veiculo veiculos[], int quantidade)
     }
 }
 
+void consultarMatrix(void)
+{
+    int i;
+    int j;
+    int alterar;
+    int origem;
+    int destino;
+    int distancia;
+
+    printf("\nCidades:\n");
+
+    for (i = 0; i < NUM_CIDADES; i++)
+    {
+        printf("%s\n", NOME_CIDADES[i]);
+    }
+
+    printf("\nOrigem/Destino\t0\t1\t2\t3\t4\n");
+
+    for (i = 0; i < NUM_CIDADES; i++)
+    {
+        printf("%d\t\t", i);
+        for (j = 0; j < NUM_CIDADES; j++)
+        {
+            printf("%d\t", distancias[i][j]);
+        }
+        printf("\n");
+    }
+
+    alterar = lerInteiro("\nDeseja alterar alguma distancia? (1-Sim / 0-Não): ");
+
+    if (alterar == 1)
+    {
+        origem = lerInteiro("Digite a cidade de origem (0-4): ");
+        destino = lerInteiro("Digite a cidade de destino (0-4): ");
+        distancia = lerInteiro("Digite a nova distancia: ");
+
+        if (origem == destino)
+        {
+            printf("As cidades devem ser diferentes.\n");
+        }
+        else if (distancia == 0 || distancia < -1)
+        {
+            printf("A distancia deve ser maior que zero ou -1 para sem rota direta.\n");
+        }
+        else
+        {
+            distancias[origem][destino] = distancia;
+            distancias[destino][origem] = distancia; // Atualiza a matriz simetricamente
+            
+            printf("Distancia atualizada com sucesso!\n");
+        }
+    }
+
+}
+
 int main(void)
 {
     struct Veiculo veiculos[MAX_VEICULOS];
@@ -234,8 +289,7 @@ int main(void)
         }
         else if (opcao == 3)
         {
-            printf("Opção 3: Consultar matriz de distancia\n");
-            // Implementar consulta da matriz de distância
+            consultarMatrix();
         }
         else if (opcao == 4)
         {
