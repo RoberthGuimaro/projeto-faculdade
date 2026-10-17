@@ -453,7 +453,7 @@ int main(void)
         {
             relatorioFrota(veiculos, quantidadeVeiculos);
         }
-        else if (opcao == 0)
+        else if (opcao == 6)
         {
             printf("Saindo do sistema...\n");
         }
@@ -461,7 +461,7 @@ int main(void)
         {
             printf("Opção inválida. Tente novamente.\n");
         }
-    } while (opcao != 0);
+    } while (opcao != 6);
 
     return 0;
 }
