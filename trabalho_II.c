@@ -1,10 +1,18 @@
 #include <stdio.h>
 
+
+
 #define NUM_CIDADES 5
+#define MAX_VEICULOS 10
+#define MAX_VIAGENS 100
+#define PRECO_COMBUSTIVEL 5.80f
+#define DISPONIVEL 0 
+#define EM_VIAGEM 1
+#define EM_MANUTENCAO 2
 
 // nomes das cidades apenas para referencias nos menus e relatorios
 const char *NOME_CIDADES[NUM_CIDADES] = {
-    "0: Central"",
+    "0: Central",
     "1: Norte",
     "2: Sul",
     "3: Leste",
