@@ -70,13 +70,12 @@ static void lerLinha(const char *prompt, char *buffer, size_t tamanho) {
 }
 
 static int lerInteiro(const char *prompt) {
-    char buffer[64], *fim;
+    char buffer[64], *endptr;
     for (;;) {
         lerLinha(prompt, buffer, sizeof(buffer));
-        char *endptr;
         int valor = strtol(buffer, &endptr, 10);
-        if (endptr != buffer && *endptr == '\0') {
-            return valor;
+        if (endptr != buffer && *endptr == '\0' && valor >= INT_MIN && valor <= INT_MAX) {
+            return (int)valor;
         }
         printf("Entrada inválida. Por favor, insira um número inteiro.\n");
     }
