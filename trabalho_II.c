@@ -103,7 +103,7 @@ static float lerFloat(const char *prompt)
     }
 }
 
-int cadastrarVeiculo(struct Veiculo veiculois[], int quantidade)
+int cadastrarVeiculo(struct Veiculo veiculos[], int quantidade)
 {
     int id;
     int repetido;
@@ -121,7 +121,7 @@ int cadastrarVeiculo(struct Veiculo veiculois[], int quantidade)
 
         for (i = 0; i < quantidade; i++)
         {
-            if (veiculois[i].id == id)
+            if (veiculos[i].id == id)
             {
                 repetido = 1;
             }
@@ -170,6 +170,39 @@ int cadastrarVeiculo(struct Veiculo veiculois[], int quantidade)
     return quantidade + 1;
 }
 
+void listarVeiculos(struct Veiculo veiculos[], int quantidade)
+{
+    int i;
+    if (quantidade == 0)
+    {
+        printf("Nenhum veículo cadastrado.\n");
+        return;
+    }
+
+    printf("\nID\tPlaca\tModelo\tConsumo (km/l)\tCapacidade (t)\tStatus\n");
+    for (i = 0; i < quantidade; i++)
+    {
+        printf("%d\t%s\t%s\t%f\t%f\t",
+               veiculos[i].id,
+               veiculos[i].placa,
+               veiculos[i].modelo,
+               veiculos[i].consumoKmL,
+               veiculos[i].capacidadeCarga);
+        if (veiculos[i].status == DISPONIVEL)
+        {
+            printf("Disponível\n");
+        }
+        else if (veiculos[i].status == EM_VIAGEM)
+        {
+            printf("Em viagem\n");
+        }
+        else if (veiculos[i].status == EM_MANUTENCAO)
+        {
+            printf("Em manutenção\n");
+        }
+    }
+}
+
 int main(void)
 {
     struct Veiculo veiculos[MAX_VEICULOS];
@@ -197,8 +230,7 @@ int main(void)
         }
         else if (opcao == 2)
         {
-            printf("Opção 2: Listar Veículos\n");
-            // Implementar listagem de veículos
+            listarVeiculos(veiculos, quantidadeVeiculos);
         }
         else if (opcao == 3)
         {
