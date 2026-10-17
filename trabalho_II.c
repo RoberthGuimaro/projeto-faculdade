@@ -343,6 +343,75 @@ void simularViagem(struct Veiculo veiculos[], int quantidade)
     }
 }
 
+void relatorioFrota(struct Veiculo veiculos[], int quantidade)
+{ 
+    int i;
+    int maisEficiente = 0;
+    int disponiveis = 0;
+    int emViagem = 0;
+    int emManutencao = 0;
+    float somaCapacidade = 0;
+    float mediaCapacidade;
+    float percentualDisponiveis;
+    float percentualEmViagem;
+    float percentualEmManutencao;
+
+    if (quantidade == 0)
+    {
+        printf("Nenhum veículo cadastrado.\n");
+        return;
+    }
+
+    for (i = 0; i < quantidade; i++)
+    {
+        if (veiculos[i].consumoKmL > veiculos[maisEficiente].consumoKmL)
+        {
+            maisEficiente = i;
+        }
+
+        somaCapacidade = somaCapacidade + veiculos[i].capacidadeCarga;
+
+        if (veiculos[i].status == DISPONIVEL)
+        {
+            disponiveis++;
+        }
+        else if (veiculos[i].status == EM_VIAGEM)
+        {
+            emViagem++;
+        }
+        else if (veiculos[i].status == EM_MANUTENCAO)
+        {
+            emManutencao++;
+        }
+
+    }
+    mediaCapacidade = somaCapacidade / quantidade;
+
+    percentualDisponiveis = disponiveis * 100.0 / quantidade;
+    percentualEmViagem = emViagem * 100.0 / quantidade;
+    percentualEmManutencao = emManutencao * 100.0 / quantidade;
+
+    printf("\nRelatório de Desempenho da Frota\n");
+    printf("======================================\n");
+
+    printf("Veículo mais eficiente\n");
+    printf("ID: %d\n", veiculos[maisEficiente].id);
+    printf("Placa: %s\n", veiculos[maisEficiente].placa);
+    printf("Modelo: %s\n", veiculos[maisEficiente].modelo);
+    printf("Consumo: %f km/l\n", veiculos[maisEficiente].consumoKmL);
+
+    printf("Disponiveis: %d\n", disponiveis);
+    printf("Percentual Disponiveis: %f%%\n", percentualDisponiveis);
+
+    printf("Em Viagem: %d\n", emViagem);
+    printf("Percentual Em Viagem: %f%%\n", percentualEmViagem);
+
+    printf("Em Manutenção: %d\n", emManutencao);
+    printf("Percentual Em Manutenção: %f%%\n", percentualEmManutencao);
+
+    printf("Capacidade média de carga: %f toneladas\n", mediaCapacidade);
+}
+
 int main(void)
 {
     struct Veiculo veiculos[MAX_VEICULOS];
@@ -382,8 +451,7 @@ int main(void)
         }
         else if (opcao == 5)
         {
-            printf("Opção 5: Relatório de desempenho de frota\n");
-            // Implementar relatório de desempenho
+            relatorioFrota(veiculos, quantidadeVeiculos);
         }
         else if (opcao == 0)
         {
