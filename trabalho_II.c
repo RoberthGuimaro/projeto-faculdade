@@ -10,6 +10,24 @@
 #define EM_VIAGEM 1
 #define EM_MANUTENCAO 2
 
+struct Veiculo {
+    int id; // identificador único
+    char placa[8];
+    char modelo[30];
+    float consumoKmL; // Consumo por litro
+    float capacidadeCarga; // Capacidade de carga em toneladas
+    int status; // 0 - disponivel, 1 - em viagem, 2 - em manutenção
+};
+
+struct Viagem {
+    int idVeiculo; // identificador único
+    int cidadeOrigem; // indice da cidade de 0 a N - 1  
+    int cidadeDestino; // indice da cidade de 0 a N - 1
+    float distanciaTotal;
+    float consumoEstimadoLitros;
+    float custoEstimadoReais;
+};
+
 // nomes das cidades apenas para referencias nos menus e relatorios
 const char *NOME_CIDADES[NUM_CIDADES] = {
     "0: Central",
@@ -32,20 +50,14 @@ int distancias[NUM_CIDADES][NUM_CIDADES] = {
     /* 4:oeste   */ {  80,      110,    40,    -1,     0 }
 };
 
-struct Veiculo {
-    int id; // identificador único
-    char placa[8];
-    char modelo[30];
-    float consumoKmL; // Consumo por litro
-    float capacidadeCarga; // Capacidade de carga em toneladas
-    int status; // 0 - disponivel, 1 - em viagem, 2 - em manutenção
-};
+static void lerLinha(const char *prompt, char *buffer, size_t tamanho) {
+    printf("%s", prompt);
+    if (fgets(buffer, tamanho, stdin) != NULL) {
+        // Remove o caractere de nova linha, se presente
+        size_t len = strlen(buffer);
+        if (len > 0 && buffer[len - 1] == '\n') {
+            buffer[len - 1] = '\0';
+        }
+    }
+}
 
-struct Viagem {
-    int idVeiculo; // identificador único
-    int cidadeOrigem; // indice da cidade de 0 a N - 1  
-    int cidadeDestino; // indice da cidade de 0 a N - 1
-    float distanciaTotal;
-    float consumoEstimadoLitros;
-    float custoEstimadoReais;
-};
