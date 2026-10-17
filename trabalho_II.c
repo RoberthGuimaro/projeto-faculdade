@@ -4,7 +4,16 @@ struct Veiculo {
     int id; // identificador único
     char placa[8];
     char modelo[30];
-    float consumoKmL; //Consumo por litro
-    float capacidadeCarga; //Capacidade de carga em toneladas
+    float consumoKmL; // Consumo por litro
+    float capacidadeCarga; // Capacidade de carga em toneladas
     int status; // 0 - disponivel, 1 - em viagem, 2 - em manutenção
+};
+
+struct Viagem {
+    int idVeiculo; // identificador único
+    int cidadeOrigem; // indice da cidade de 0 a N - 1  
+    int cidadeDestino; // indice da cidade de 0 a N - 1
+    float distanciaTotal;
+    float consumoEstimadoLitros;
+    float custoEstimadoReais;
 };
